@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Record Management</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background-color: #0056b3;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styles */
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        form div {
+            display: flex;
+            flex-direction: column;
+        }
+        form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        form input, form select, form button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        form input:focus, form select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        table thead {
+            background-color: #007bff;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table button {
+            background: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        table button:hover {
+            background: #218838;
+        }
+
+        /* Hidden Fields Section */
+        #hiddenFieldsForm {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Advanced Record Management System</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showSection('addRecord')">Add Record</a></li>
+            <li><a href="#" onclick="showSection('viewRecords')">View Records</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <!-- Add Record Section -->
+        <div class="section" id="addRecord">
+            <h2>Add New Record</h2>
+            <form id="dataForm">
+                <div>
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div>
+                    <label for="item">Item:</label>
+                    <select id="item"onchange="toggleCustomItem()">
+                        <option value="">-- Select Item --</option>
+                        <option value="maandazi">maandazi</option>
+                        <option value="chapati">chapati</option>
+                        <option value="custom">Add Custom Item</option>
+                    </select>
+                </div>
+                
+                     <div id="customItemDiv" style="display: none;">
+                    <label for="customItem">Custom Item:</label>
+                    <input type="text" id="item" placeholder="Enter Custom Item">
+                </div>
+                
+                
+                
+                
+                <div>
+                    <label for="price">Price per Unit:</label>
+                    <input type="number" id="price" placeholder="Enter Price" required>
+                </div>
+                <div>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" placeholder="Enter Quantity" required>
+                </div>
+                <button type="button" onclick="addRecord()">Add Record</button>
+            </form>
+        </div>
+
+        <!-- View Records Section -->
+        <div class="section" id="viewRecords" style="display: none;">
+            <h2>Records</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Item</th>
+                       <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsTable"></tbody>
+            </table>
+
+            <div id="confirmationSection">
+                <p>Have you finished entering data?</p>
+                <button onclick="toggleHiddenFields(true)">Yes</button>
+                <button onclick="toggleHiddenFields(false)">No</button>
+            </div>
+
+            <form id="hiddenFieldsForm">
+                <div>
+                    <label for="tenderCode">Tender Code:</label>
+                    <input type="text" id="tenderCode" placeholder="Enter Tender Code">
+                </div>
+                <div>
+                    <label for="customers">Customers:</label>
+                    <input type="number" id="customers" placeholder="Enter Customers">
+                </div>
+                <div>
+                    <label for="pricePerCustomer">Price per Customer:</label>
+                    <input type="number" id="pricePerCustomer" placeholder="Enter Price per Customer">
+                </div>
+                <button type="button" onclick="saveHiddenFields()">Save Data</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    
+    function toggleCustomItem() {
+            const itemSelect = document.getElementById("item").value;
+            const customItemDiv = document.getElementById("customItemDiv");
+            customItemDiv.style.display = itemSelect === "custom" ? "block" : "none";
+    
+    }
+    
+    
+    
+        function addRecord() {
+            const date = document.getElementById("date").value;
+            const item = document.getElementById("item").value;
+         
+          let customItem = document.getElementById("item").value;
+            const price = parseFloat(document.getElementById("price").value);
+            const quantity = parseInt(document.getElementById("quantity").value);
+
+            if (!date || !item || isNaN(price) || isNaN(quantity)) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            const total = (price * quantity).toFixed(2);
+            const table = document.getElementById("recordsTable");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${date}</td>
+                <td>${item}</td>
+                <td>${price}</td>
+                <td>${quantity}</td>
+                <td>${total}</td>
+                <td>
+                    <button onclick="editRow(this)">Edit</button>
+                    <button onclick="deleteRow(this)">Delete</button>
+                </td>
+            `;
+        }
+
+        function editRow(button) {
+            const row = button.parentElement.parentElement;
+            const cells = row.querySelectorAll("td");
+            cells[0].innerHTML = `<input type="date" value="${cells[0].innerText}">`;
+            cells[1].innerHTML = `<input type="text" value="${cells[1].innerText}">`;
+            cells[2].innerHTML = `<input type="number" value="${cells[2].innerText}">`;
+            cells[3].innerHTML = `<input type="number" value="${cells[3].innerText}">`;
+            cells[5].innerHTML = `<button onclick="saveRow(this)">Save</button>`;
+        }
+
+        function saveRow(button) {
+            const row = button.parentElement.parentElement;
+            const inputs = row.querySelectorAll("input");
+            row.innerHTML = `
+                <td>${inputs[0].value}</td>
+                <td>${inputs[1].value}</td>
+                <td>${inputs[2].value}</td>
+                <td>${inputs[3].value}</td>
+                <td>${(inputs[2].value * inputs[3].value).toFixed(2)}</td>
+                <td>
+                    <button onclick="editRow(this)">Edit</button>
+                    <button onclick="deleteRow(this)">Delete</button>
+                </td>
+            `;
+        }
+
+        function deleteRow(button) {
+            button.parentElement.parentElement.remove();
+        }
+
+        function toggleHiddenFields(show) {
+            document.getElementById("hiddenFieldsForm").style.display = show ? "block" : "none";
+        }
+
+        function saveHiddenFields() {
+            alert("Data Saved Successfully!");
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll(".section").forEach((section) => {
+                section.style.display = section.id === sectionId ? "block" : "none";
+            });
+        }
+    </script>
+</body>
+</html>
