@@ -190,11 +190,11 @@
 </head>
 <body>
     <header>
-        <h1> ACADOGAR INVESTMENTS LIMITED RECORDS MANAGEMENT SYSTEM </h1>
+        <h1 style="font-family: 'Times New Roman', Times, serif;"><b>ACADOGAR INVESTMENTS LIMITED RECORDS MANAGEMENT SYSTEM</b></h1>
     </header>
     <nav>
-        <ul>
-            <li><a href="#" onclick="showSection('addRecord')">Add Record</a></li>
+        <ul  >
+            <li ><a href="#" onclick="showSection('addRecord')"  >Add Record</a></li>
             <li><a href="#" onclick="showSection('viewRecords')">View Records</a></li>
             <li><a href="#" onclick="showSection('report')">Report</a></li>
         </ul>
@@ -246,9 +246,9 @@
                     <tr>
                         <th>Date</th>
                         <th>Item</th>
-                       <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
+                        <th>Quantity Purchased</th>
+                       <th>Price Per Unit</th>  
+                        <th>Total Cost</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -320,8 +320,8 @@
             row.innerHTML = `
                 <td>${date}</td>
                 <td>${item}</td>
-                <td>${price}</td>
                 <td>${quantity}</td>
+                <td>${price}</td>  
                 <td>${total}</td>
                 <td>
                     <button onclick="editRow(this)">Edit</button>
@@ -395,6 +395,14 @@
         }
 
  
+
+
+
+
+
+
+
+
 
 
 
